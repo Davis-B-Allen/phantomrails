@@ -1,0 +1,7 @@
+GENERATE CARDS
+
+<%= form_tag("/cards/generated", multipart: true) do %>
+  <%= label_tag(:email, "Email:") %>
+  <%= text_field_tag(:email) %>
+  <%= submit_tag("Generate Cards") %>
+<% end %>

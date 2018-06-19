@@ -4,7 +4,8 @@ class CardsController < ApplicationController
   end
 
   def generated
-    PngGenerator.generate
+    email = params["email"]
+    PngGenerator.generate(email)
     redirect_to '/cards/generator'
   end
 end

@@ -3,5 +3,12 @@ GENERATE CARDS
 <%= form_tag("/cards/generated", multipart: true) do %>
   <%= label_tag(:email, "Email:") %>
   <%= text_field_tag(:email) %>
+  <br>
+  <%= label_tag :details_tsv, "Details TSV file" %>
+  <%= file_field_tag 'details_tsv' %>
+  <br>
+  <%= label_tag :content_tsv, "Content TSV file" %>
+  <%= file_field_tag 'content_tsv' %>
+  <br>
   <%= submit_tag("Generate Cards") %>
 <% end %>

@@ -14,7 +14,7 @@ class PngGenerator
   PATH_TO_PHANTOM_SCRIPT = Rails.root.join("lib", "assets", "cardgen", "cardgen.js").to_s
   PATH_TO_INPUT_HTML = Rails.root.join("lib", "assets", "cardgen", "input", "html", "cardExportTest.html").to_s
 
-  def self.generate(email, details_tsv, content_tsv)
+  def self.generate(email, font, details_tsv, content_tsv)
     FileUtils.rm_rf(PHANTOM_DIRECTORY)
     command_to_execute = "phantomjs \"#{PATH_TO_PHANTOM_SCRIPT}\""
     command_to_execute += " --tsvdetails \"#{details_tsv}\""
@@ -24,7 +24,8 @@ class PngGenerator
     command_to_execute += " --topic DisplayTopic"
     command_to_execute += " --text DisplayText"
     command_to_execute += " --outputfolder \"#{PHANTOM_DIRECTORY}\""
-    command_to_execute += " --font segoe"
+    command_to_execute += " --font \"#{font}\""
+    puts command_to_execute
 
     system command_to_execute
     File.delete(details_tsv) if File.exist?(details_tsv)

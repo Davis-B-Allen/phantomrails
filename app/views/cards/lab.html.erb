@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <meta name="viewport" content="width=640">
+		<title>Cards Against Inanity Lab</title>
+		<meta name="description" content="Help us improve Cards Against Inanity by playing a few simulated hands in the Lab.">
+
+
+
+    <%= javascript_include_tag 'cah/jquery.min.js'%>
+    <%= javascript_include_tag 'cah/main.js'%>
+    <%= javascript_include_tag 'cah/easeljs-0.7.1.min.js'%>
+    <%= javascript_include_tag 'cah/TweenMax.min.js'%>
+    <%= javascript_include_tag 'cah/anims.js'%>
+    <%= javascript_include_tag 'cah/startBtn.js'%>
+    <%= javascript_include_tag 'cah/surveyBox.js'%>
+    <%= javascript_include_tag 'cah/intro.js'%>
+    <%= javascript_include_tag 'cah/noneBtn.js'%>
+    <%= javascript_include_tag 'cah/check.js'%>
+    <%= javascript_include_tag 'cah/card.js'%>
+    <%= javascript_include_tag 'cah/mainContainer.js'%>
+    <%= javascript_include_tag 'cah/root2017-2.js'%>
+
+
+		<style type="text/css">
+			body
+			{
+				background-color:#000000;
+				margin:0px;
+				padding:0px;
+			}
+		</style>
+
+
+  </head>
+  <body onload="setup()" style="cursor: pointer;">
+		<canvas id="canvas" width="1440" height="756"></canvas>
+	</body>
+</html>

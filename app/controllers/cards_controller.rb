@@ -28,4 +28,13 @@ class CardsController < ApplicationController
 
     redirect_to '/cards/generator'
   end
+
+  def lab
+    render layout: false
+  end
+
+  def playtest
+    puts params
+    head :ok
+  end
 end

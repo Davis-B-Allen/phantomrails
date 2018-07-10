@@ -11,4 +11,18 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
-# Rails.application.config.assets.precompile += %w( admin.js admin.css )
+Rails.application.config.assets.precompile += %w(
+  cah/anims.js
+  cah/card.js
+  cah/check.js
+  cah/easeljs-0.7.1.min.js
+  cah/intro.js
+  cah/jquery.min.js
+  cah/main.js
+  cah/mainContainer.js
+  cah/noneBtn.js
+  cah/root2017-2.js
+  cah/startBtn.js
+  cah/surveyBox.js
+  cah/TweenMax.min.js
+)

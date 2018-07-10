@@ -5,4 +5,7 @@ Rails.application.routes.draw do
 
   root 'application#hello'
   get  '/cardgen',  to: 'application#cardgen'
+
+  get  '/lab',  to: 'cards#lab'
+  post 'cards/playtest'
 end

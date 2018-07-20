@@ -2,7 +2,7 @@
 
 (function ()
 {
-	var Card = function (content, isBlack, blackType) { this.initialize(content, isBlack, blackType) };
+	var Card = function (content, userEntryEnabled, isBlack, blackType) { this.initialize(content, userEntryEnabled, isBlack, blackType) };
 	var p = Card.prototype = new createjs.Container();
 	p.Container_initialize = p.initialize;
 	p.name = "Card";
@@ -22,7 +22,7 @@
 	p.outline;
 	p.picked;
 
-	p.initialize = function (content, isBlack, blackType)
+	p.initialize = function (content, userEntryEnabled, isBlack, blackType)
 	{
 		console.log(p + " / initialized!");
 
@@ -31,6 +31,7 @@
 		// setup vars
 		this.textContent = content;
 		var thisScope = this;
+		this.userEntryEnabled = userEntryEnabled || false;
 		this.isBlack = isBlack || false;
 		this.blackType = blackType || "pick1";
 		if (this.isBlack) this.blackType = blackType;
@@ -56,7 +57,8 @@
 		// add bg
 		this.bg = new createjs.Shape();
 		var bgc = "#FFFFFF";
-		if (this.isBlack) bgc = "#000000";
+		if (this.isBlack) bgc = "#A20000";
+		// if (this.userEntryEnabled) bgc = "#aaaaaa";
 		this.bg.graphics.beginFill(bgc);
 		this.bg.graphics.drawRoundRect(0, 0, 250, 350, 12);
 		this.bg.graphics.endFill();
@@ -67,6 +69,7 @@
 		// add text
 		var txc = "#000000";
 		if (this.isBlack) txc = "#FFFFFF";
+		if (this.userEntryEnabled) txc = "#000000";
 		this.textContainer = new createjs.Text(this.textContent, "bold 21px " + window.fontString, txc);
 		this.textContainer.x = 28 - 125;
 		this.textContainer.y = 24 - 175;
@@ -98,6 +101,13 @@
 
 	// METHODS //
 
+	p.updateCardText = function (cardText)
+	{
+		this.textContent = cardText;
+		this.textContainer.text = cardText;
+		this.textContainer.updateCache();
+	}
+
 	p.setPicked = function ()
 	{
 		this.picked = true;
@@ -125,6 +135,15 @@
 
 	p.handleClick = function (e)
 	{
+		if (this.userEntryEnabled) {
+			var altQuestion = prompt("Please enter your own question", "A better question");
+			if (altQuestion == null) return;
+			this.userEntryEnabled = false;
+			this.textContent = altQuestion;
+			this.textContainer.text = altQuestion;
+			this.textContainer.updateCache();
+			// return;
+		}
 		if (rootMobileMode && !window.mainContainer.inPick2Mode)
 		{
 			this.bg.graphics.clear();

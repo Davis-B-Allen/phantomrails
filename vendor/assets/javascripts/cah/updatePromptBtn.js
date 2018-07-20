@@ -1,12 +1,10 @@
-/* by Ben Hantoot */
-
 (function ()
 {
-	var NoneBtn = function () { this.initialize() };
-	var p = NoneBtn.prototype = new createjs.Container();
+	var UpdatePromptBtn = function () { this.initialize() };
+	var p = UpdatePromptBtn.prototype = new createjs.Container();
 	p.Container_initialize = p.initialize;
-	p.name = "NoneBtn";
-	window.NoneBtn = NoneBtn;
+	p.name = "UpdatePromptBtn";
+	window.UpdatePromptBtn = UpdatePromptBtn;
 
 	// PROPERTIES //
 
@@ -36,7 +34,7 @@
 		this.inr.addChild(this.bg);
 
 		// add txt
-		this.txt = new createjs.Text("Deal another prompt", "bold 21px " + window.fontString, "#A20000");
+		this.txt = new createjs.Text("Write my own", "bold 21px " + window.fontString, "#A20000");
 		this.txt.lineWidth = 196;
 		this.txt.lineHeight = 28;
 		this.inr.addChild(this.txt);
@@ -77,7 +75,10 @@
 			this.bg.graphics.endFill();
 		}
 
-		window.mainContainer.onCardClicked(9999);
+    var altPrompt = prompt("Please enter your own prompt.", "A different prompt");
+    if (altPrompt == null) return;
+    window.mainContainer.onAltPromptSubmitted(altPrompt);
+		// window.mainContainer.onCardClicked(9999);
 	}
 
 }());

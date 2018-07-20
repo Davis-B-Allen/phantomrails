@@ -29,7 +29,8 @@
 		this.Container_initialize();
 
 		// setup vars
-		this.copy = "We constantly update CAH to keep it as fresh and hilarious as possible. Here, in the Lab, you can help us improve the game by playing a few simluated rounds. Each round, pick the white card that's funniest in combination with the black card. If nothing seems hilarious, just click the 'none of these are funny' button. \r\n\r\nWe promise not to use your data for evil.";
+		// this.copy = "We constantly update CAH to keep it as fresh and hilarious as possible. Here, in the Lab, you can help us improve the game by playing a few simluated rounds. Each round, pick the white card that's funniest in combination with the black card. If nothing seems hilarious, just click the 'none of these are funny' button. \r\n\r\nWe promise not to use your data for evil.";
+		this.copy = "Introduction and maybe rules go here. If someone came to you with this complaint, which of these questions would be best for them to ask themself?";
 
 		// add bg
 		this.bg = new createjs.Shape();
@@ -47,15 +48,17 @@
 		// this.logo.y = 244;
 
 		// add text
-		this.txt1 = new createjs.Text("Lab", "bold 30px " + window.fontString, "#FFFFFF");
+		this.txt1 = new createjs.Text("Cards Against Inanity Lab", "bold 30px " + window.fontString, "#FFFFFF");
 		this.addChild(this.txt1);
 		this.txt1.x = 199;
-		this.txt1.y = 486;
+		// this.txt1.y = 486;
+		this.txt1.y = 244;
 
 		this.txt2 = new createjs.Text(this.copy, "18px " + window.fontString, "#FFFFFF");
 		this.addChild(this.txt2);
 		this.txt2.x = 199;
-		this.txt2.y = 559;
+		// this.txt2.y = 559;
+		this.txt2.y = 313;
 		this.txt2.lineHeight = 30;
 		this.txt2.lineWidth = 550;
 

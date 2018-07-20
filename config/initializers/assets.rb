@@ -21,6 +21,7 @@ Rails.application.config.assets.precompile += %w(
   cah/main.js
   cah/mainContainer.js
   cah/noneBtn.js
+  cah/updatePromptBtn.js
   cah/root2017-2.js
   cah/startBtn.js
   cah/surveyBox.js

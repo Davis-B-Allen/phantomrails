@@ -15,6 +15,9 @@
 	p.cardWidth = 250;
 	p.cardHeight = 350;
 	p.cardSpacer = 15;
+	p.handSize = 10;
+	p.extraUserEntryCard = true;
+	p.numStandardWhiteCards;
 	p.defaultCardsWidth;
 	p.defaultCardsHeight;
 	p.cardContainer;
@@ -48,6 +51,13 @@
 		this.previousBlackCardIndices = new Array();
 		this.pick2Card1Index = null;
 		this.introKilled = false;
+
+		// setup white cards
+		if (this.extraUserEntryCard){
+			this.numStandardWhiteCards = this.handSize - 1;
+		} else {
+			this.numStandardWhiteCards = this.handSize;
+		}
 
 		//add bg
 		this.bg = new createjs.Shape();
@@ -96,12 +106,43 @@
 		this.counter.addChild(this.counterTitle);
 		this.counter.addChild(this.counterCount);
 
-		// add intro
-		this.intro = new Intro();
-		this.addChild(this.intro);
+		// // add intro
+		// this.intro = new Intro();
+		// this.addChild(this.intro);
+
+		// skip intro
+		this.userInfo =
+		{
+			age:this.unify(30, 3),
+			gender:0,
+			experience:3,
+			location:0
+		};
+		this.skipIntro();
 	}
 
 	// METHODS //
+
+	p.skipIntro = function ()
+	{
+		if (!this.introKilled)
+		{
+			this.introKilled = true;
+
+			var thisScope = this;
+			TweenMax.delayedCall(0.50, function ()
+			{
+				thisScope.removeChild(thisScope.intro);
+				thisScope.animateIn();
+
+				if (rootMobileMode)
+				{
+					createjs.Touch.disable(stage);
+					window.setFinalMobileStageSize();
+				}
+			});
+		}
+	}
 
 	p.killIntro = function ()
 	{
@@ -160,13 +201,13 @@
 		}
 	}
 
-	p.getTenWhiteCardIndices = function ()
+	p.getWhiteCardIndices = function (numWhiteCards)
 	{
 		var indices = new Array();
 		var cards = new Array();
 
 		var newIndex;
-		for (var i = 0; i < 10; i++)
+		for (var i = 0; i < numWhiteCards; i++)
 		{
 			newIndex = Math.floor(whiteCards.length * Math.random());
 			while (indices.indexOf(newIndex) != -1 || window.whiteCards[newIndex] == "*.") newIndex = Math.floor(whiteCards.length * Math.random());
@@ -203,7 +244,13 @@
 		// add skip
 		this.noneBtn = new NoneBtn();
 		this.cardContainer.addChild(this.noneBtn);
-		this.noneBtn.x = -this.defaultCardsWidth/2 + 4 * (this.cardWidth + this.cardSpacer);
+		this.noneBtn.x = -this.defaultCardsWidth/2 + 3 * (this.cardWidth + this.cardSpacer);
+
+		// // add Update Prompt button
+		this.updatePromptBtn = new UpdatePromptBtn();
+		this.cardContainer.addChild(this.updatePromptBtn);
+		this.updatePromptBtn.x = -this.defaultCardsWidth/2 + 3 * (this.cardWidth + this.cardSpacer);
+		this.updatePromptBtn.y = 182;
 
 		// add cards
 		this.count++;
@@ -215,13 +262,13 @@
 		// {
 			this.inPick2Mode = false;
 			this.currentBlackCardIndex = this.getBlackCardIndex(); // pick 1
-			this.currentBlackCard = new Card(blackCards[this.currentBlackCardIndex], true);
+			this.currentBlackCard = new Card(blackCards[this.currentBlackCardIndex], false, true);
 		// }
 		// else // pick2
 		// {
 		// 	this.inPick2Mode = true;
 		// 	this.currentBlackCardIndex = this.getBlackCardIndex2();
-		// 	this.currentBlackCard = new Card(blackCards2[this.currentBlackCardIndex], true, "pick2");
+		// 	this.currentBlackCard = new Card(blackCards2[this.currentBlackCardIndex], false, true, "pick2");
 		// }
 		this.currentBlackCard.i = this.currentBlackCardIndex;
 		this.cardContainer.addChild(this.currentBlackCard);
@@ -229,9 +276,11 @@
 
 		// white cards
 		this.currentWhiteCards = new Array();
-		this.currentWhiteCardIndices = this.getTenWhiteCardIndices();
+		this.currentWhiteCardIndices = this.getWhiteCardIndices(this.numStandardWhiteCards);
+		if (this.extraUserEntryCard) this.currentWhiteCardIndices.push(9998);
+		// this.currentWhiteCardIndices = this.getWhiteCardIndices(this.handSize);
 		var i;
-		for (i = 0; i < 10; i++)
+		for (i = 0; i < this.numStandardWhiteCards; i++)
 		{
 			var card = new Card(whiteCards[this.currentWhiteCardIndices[i]]);
 			this.cardContainer.addChild(card);
@@ -246,6 +295,17 @@
 
 			this.currentWhiteCards.push(card);
 		}
+		if (this.extraUserEntryCard) {
+			var card = new Card("______ _____ ____ _______ _______ __ ___ _____ _______? \n\n(Click me to \nENTER your own response.)", true);
+			card.i = 9998
+			this.cardContainer.addChild(card);
+			card.x = -this.defaultCardsWidth/2 + i * (this.cardWidth + this.cardSpacer);
+			card.y = this.cardHeight + this.cardSpacer;
+			card.i = this.currentWhiteCardIndices[i];
+			card.x -= 5 * (this.cardWidth + this.cardSpacer);
+			card.y += (this.cardHeight + this.cardSpacer);
+			this.currentWhiteCards.push(card);
+		}
 
 		// reposition for mobile
 		if (rootMobileMode)
@@ -257,7 +317,7 @@
 				this.currentBlackCard.x = 50;
 				this.currentBlackCard.y = 100;
 
-				for (i = 0; i < 10; i++)
+				for (i = 0; i < this.handSize; i++)
 				{
 					card = this.currentWhiteCards[i];
 					card.x = 50 + 290 * (i % 2);
@@ -266,6 +326,9 @@
 
 				this.noneBtn.x = 336;
 				this.noneBtn.y = 100;
+
+				this.updatePromptBtn.x = 336;
+				this.updatePromptBtn.y = 282;
 			}
 			else
 			{
@@ -276,7 +339,7 @@
 				this.currentBlackCard.y = sy;
 				this.currentBlackCard.scaleX = this.currentBlackCard.scaleY = sc;
 
-				for (i = 0; i < 10; i++)
+				for (i = 0; i < this.handSize; i++)
 				{
 					card = this.currentWhiteCards[i];
 					card.scaleX = card.scaleY = sc;
@@ -287,6 +350,10 @@
 				this.noneBtn.scaleX = this.noneBtn.scaleY = sc;
 				this.noneBtn.x = 235;
 				this.noneBtn.y = 98;
+
+				this.updatePromptBtn.scaleX = this.updatePromptBtn.scaleY = sc;
+				this.updatePromptBtn.x = 235;
+				this.updatePromptBtn.y = 98 + 182*sc;
 			}
 		}
 
@@ -314,7 +381,7 @@
 			TweenMax.to(this.currentBlackCard, 0.20, {delay:lag, alpha:1, ease:Quad.easeOut});
 
 			// white cards
-			for (var i = 0; i < 10; i++)
+			for (var i = 0; i < this.handSize; i++)
 			{
 				var targ = this.currentWhiteCards[i];
 				var d = lag + 0.40 + 0.040 * i;
@@ -328,6 +395,10 @@
 			// none btn
 			this.noneBtn.alpha = 0;
 			TweenMax.to(this.noneBtn, 0.50, {delay:1.20, alpha:1, ease:Quad.easeOut})
+
+			// update Prompt btn
+			this.updatePromptBtn.alpha = 0;
+			TweenMax.to(this.updatePromptBtn, 0.50, {delay:1.20, alpha:1, ease:Quad.easeOut})
 		}
 		else
 		{
@@ -337,7 +408,8 @@
 
 			TweenMax.from(this.currentBlackCard, t, {delay:lag, y: this.currentBlackCard.y + sl, alpha:0, ease:Quint.easeOut});
 			TweenMax.from(this.noneBtn, t, {delay:lag + sp, y: this.noneBtn.y + sl, alpha:0, ease:Quint.easeOut});
-			for (var i = 0; i < 10; i++)
+			TweenMax.from(this.updatePromptBtn, t, {delay:lag + sp, y: this.updatePromptBtn.y + sl, alpha:0, ease:Quint.easeOut});
+			for (var i = 0; i < this.handSize; i++)
 			{
 				var targ = this.currentWhiteCards[i];
 				TweenMax.from(targ, t, {delay:lag + sp * 2 + sp * i, y:targ.y + sl, alpha:0, ease:Quint.easeOut});
@@ -345,10 +417,17 @@
 		}
 	}
 
+	p.onAltPromptSubmitted = function (altPrompt)
+	{
+		this.currentBlackCard.updateCardText(altPrompt);
+	}
+
 	p.onCardClicked = function (i, cardClicked)
 	{
 		var thisScope = this;
 
+		var chosenAnswer = "No Answer";
+		if (cardClicked != null) chosenAnswer = cardClicked.textContent;
 		if (i != 9999 && this.inPick2Mode && (this.pick2Card1Index == null || this.pick2Card1Index == i))
 		{
 			if (!cardClicked.picked)
@@ -369,15 +448,15 @@
 			{
 				if (i == 9999 && this.inPick2Mode)
 				{
-					this.formatAndSendResult(totalTime, i, i);
+					this.formatAndSendResult(totalTime, chosenAnswer, i, i);
 				}
 				else if (this.pick2Card1Index == null)
 				{
-					this.formatAndSendResult(totalTime, i);
+					this.formatAndSendResult(totalTime, chosenAnswer, i);
 				}
 				else
 				{
-					this.formatAndSendResult(totalTime, this.pick2Card1Index, i);
+					this.formatAndSendResult(totalTime, chosenAnswer, this.pick2Card1Index, i);
 				}
 			}
 
@@ -400,7 +479,8 @@
 
 				TweenMax.to(this.currentBlackCard, t, {y:-370, alpha:0, ease:Expo.easeIn});
 				TweenMax.to(this.noneBtn, 0.25, {alpha:0, ease:Quad.easeOut});
-				for (j = 0; j < 10; j++)
+				TweenMax.to(this.updatePromptBtn, 0.25, {alpha:0, ease:Quad.easeOut});
+				for (j = 0; j < this.handSize; j++)
 				{
 					targ = this.currentWhiteCards[j];
 					targ.handleRollOut(null); // play rollout anims
@@ -422,7 +502,8 @@
 
 				TweenMax.to(this.currentBlackCard, t, {delay:lag, alpha:0, ease:Quad.easeIn});
 				TweenMax.to(this.noneBtn, t, {delay:lag + sp, alpha:0, ease:Quad.easeIn});
-				for (j = 0; j < 10; j++)
+				TweenMax.to(this.updatePromptBtn, t, {delay:lag + sp, alpha:0, ease:Quad.easeIn});
+				for (j = 0; j < this.handSize; j++)
 				{
 					targ = this.currentWhiteCards[j];
 					targ.handleRollOut(null); // play rollout anims
@@ -439,7 +520,7 @@
 		}
 	}
 
-	p.formatAndSendResult = function (totalTime, i, i2, i3)
+	p.formatAndSendResult = function (totalTime, chosenAnswer, i, i2, i3)
 	{
 		var result = this.unify(this.userInfo.age, 3) + "/" + this.userInfo.gender.toString() + "/" + this.userInfo.experience.toString() + "/" + this.userInfo.location.toString() + "/";
 		if (i2)
@@ -450,10 +531,13 @@
 		{
 			result += this.unify(this.currentBlackCardIndex) + "/" + this.unify(i) + "/";
 		}
+		result += this.currentBlackCard.textContent + "/";
+		result += chosenAnswer + "/";
 		if (i3) { result += this.unify(i2) + "/" + this.unify(i3) + "/" }
 			else if (i2) { result += this.unify(i2) + "/9999/" }
 			else { result += "9999/9999/" };
-		for (var j = 0; j < 10; j++) result += this.unify(this.currentWhiteCardIndices[j]) + "/";
+		for (var j = 0; j < this.handSize; j++) result += this.unify(this.currentWhiteCardIndices[j]) + "/";
+		for (var j = 0; j < this.handSize; j++) result += this.currentWhiteCards[j].textContent + "/";
 		result += this.unify(totalTime, 6);
 
 		console.log("Result: " + result);

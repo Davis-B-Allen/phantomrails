@@ -13,9 +13,14 @@
   src:url(Merienda-Regular.ttf)
 }
 
-@font-face{
-  font-family:NotoSansAll;
+/* @font-face{
+  font-family:"Noto Sans";
   src:url(NotoSans-Regular.ttf)
+}
+ */
+@font-face{
+  font-family:"Noto Sans Bengali";
+  src:url(NotoSansBengali-Regular.ttf)
 }
 
 .card-container {

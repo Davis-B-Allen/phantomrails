@@ -8,6 +8,17 @@
     <style>
       body {margin:0;}
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+      WebFont.load({
+        google: {
+          families: ['Noto Sans']
+        },
+        loading:  function(){ console.log('WebFonts loading'); },
+        active:   function(){ console.log('WebFonts active'); },
+        inactive: function(){ console.log('WebFonts inactive'); }
+      });
+    </script>
   </head>
 
   <body>
@@ -40,10 +51,10 @@
     <div class="q-card-content-middle">
       <div class="vertical-align" id="q-card-question">
         <p id="q-card-command">
-          I ask myself:
+          আমরা নিজেদেরকে জিজ্ঞেস কর:
         </p>
         <p id="q-card-question-text">
-          Where do the things I want come from?
+          আমরা যা চাই তা কোথা থেকে আসে?
         </p>
       </div>
     </div>

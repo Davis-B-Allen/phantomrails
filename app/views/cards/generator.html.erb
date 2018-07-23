@@ -1,5 +1,12 @@
 GENERATE CARDS
 
+<script type="text/javascript">
+  function changeradioother(){
+    var other = document.getElementById("other");
+    other.value = document.getElementById("inputother").value;
+  }
+</script>
+
 <%= form_tag("/cards/generated", multipart: true) do %>
   <%= label_tag(:email, "Email:") %>
   <%= text_field_tag(:email) %>
@@ -20,6 +27,11 @@ GENERATE CARDS
   <%= label_tag nil, nil, class: "radio-inline" do %>
     <%= radio_button_tag :font, "Noto Sans Bengali" %> Noto Sans Bengali
   <% end %>
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag :font, "other", false, id: "other"  %> Other <input  id="inputother" type="text" onchange="changeradioother()" />
+  <% end %>
+  <br>
+  For the "other" font option, above, you can enter the name of any font you can find in the <%= link_to "Google Fonts Repository", "https://fonts.google.com/", target: :_blank %>
   <br>
 
   <%= submit_tag("Generate Cards") %>

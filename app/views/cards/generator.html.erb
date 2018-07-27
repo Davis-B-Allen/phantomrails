@@ -17,6 +17,9 @@ GENERATE CARDS
   <%= label_tag :content_tsv, "Content TSV file" %>
   <%= file_field_tag 'content_tsv' %>
   <br>
+  <%= label_tag :content_tsv, "OPTIONAL: Second Language Content TSV (Bilingual Cards)" %>
+  <%= file_field_tag 'bi_content_tsv' %>
+  <br>
 
   <%= label_tag nil, nil, class: "radio-inline" do %>
     <%= radio_button_tag :font, "segoe", checked: "true" %> Segoe
